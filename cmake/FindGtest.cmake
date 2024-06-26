@@ -1,0 +1,28 @@
+# Copyright (c) 2023 vesoft inc. All rights reserved.
+
+find_library(Gtest_LIB NAMES libgtest.so DOC "Gtest library")
+find_library(GtestMain_LIB NAMES libgtest_main.so DOC "Gtest main library")
+find_library(Gmock_LIB NAMES libgmock.so DOC "Gmock library")
+find_library(GmockMain_LIB NAMES libgtest_main.so DOC "Gmock main library")
+if(NOT Gtest_LIB)
+        message(FATAL_ERROR "libgest not found")
+endif()
+if(NOT GtestMain_LIB)
+        message(FATAL_ERROR "libgtest_main not found")
+endif()
+if(NOT Gmock_LIB)
+        message(FATAL_ERROR "libgmock not found")
+endif()
+if(NOT GmockMain_LIB)
+        message(FATAL_ERROR "libgmock_main not found")
+endif()
+
+add_library(Gtest SHARED IMPORTED GLOBAL)
+add_library(Gtest::main SHARED IMPORTED GLOBAL)
+add_library(Gmock SHARED IMPORTED GLOBAL)
+add_library(Gmock::main SHARED IMPORTED GLOBAL)
+
+nebula_setup_imported_library(NAME Gtest PATH ${Gtest_LIB} LIBRARIES m)
+nebula_setup_imported_library(NAME Gtest::main PATH ${GtestMain_LIB} LIBRARIES Gtest)
+nebula_setup_imported_library(NAME Gmock PATH ${Gmock_LIB} LIBRARIES Gtest)
+nebula_setup_imported_library(NAME Gmock::main PATH ${GmockMain_LIB} LIBRARIES Gmock)
